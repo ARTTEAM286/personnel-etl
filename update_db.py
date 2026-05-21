@@ -23,9 +23,16 @@ df = pd.read_excel(
     file_path,
     sheet_name="ПЕРЕМІЩЕННЯ",
     header=1,
+    skiprows=[2],
     usecols="B:M",
     engine="openpyxl"
 )
+
+# ============================================
+# ORIGINAL ROW COUNT
+# ============================================
+
+original_rows = len(df)
 
 # ============================================
 # RENAME COLUMNS
@@ -57,22 +64,6 @@ df = df.rename(columns={
 
     'Коментар': 'comment'
 })
-
-# ============================================
-# REMOVE EMPTY ROWS
-# ============================================
-
-df = df.dropna(
-    subset=["full_name"]
-)
-
-# ============================================
-# REMOVE SERVICE ROW
-# ============================================
-
-df = df[
-    df["full_name"] != "9"
-]
 
 # ============================================
 # STRIP SPACES
@@ -148,10 +139,10 @@ for col in text_columns:
     )
 
 # ============================================
-# COUNT ROWS
+# FINAL ROW COUNT
 # ============================================
 
-rows_count = len(df)
+final_rows = len(df)
 
 # ============================================
 # DEBUG
@@ -180,6 +171,16 @@ engine = create_engine(
 try:
 
     with engine.begin() as conn:
+
+        # ====================================
+        # GET OLD ROW COUNT
+        # ====================================
+
+        old_rows = conn.execute(
+            text(
+                "SELECT COUNT(*) FROM personnel_movements"
+            )
+        ).scalar()
 
         # ====================================
         # CLEAR TABLE
@@ -212,7 +213,15 @@ try:
 
     print("ОНОВЛЕННЯ БАЗИ ЗАВЕРШЕНО УСПІШНО")
 
-    print(f"Скопійовано рядків: {rows_count}")
+    print("-----------------------------------")
+
+    print(f"Було рядків у БД: {old_rows}")
+
+    print(f"Очищено рядків у БД: {old_rows}")
+
+    print(f"Було рядків в Excel: {original_rows}")
+
+    print(f"Завантажено нових рядків: {final_rows}")
 
     print(f"Таблиця: personnel_movements")
 
