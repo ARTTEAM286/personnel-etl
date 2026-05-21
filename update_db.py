@@ -23,7 +23,6 @@ df = pd.read_excel(
     file_path,
     sheet_name="ПЕРЕМІЩЕННЯ",
     header=1,
-    skiprows=[2],
     usecols="B:M",
     engine="openpyxl"
 )
@@ -64,6 +63,22 @@ df = df.rename(columns={
 
     'Коментар': 'comment'
 })
+
+# ============================================
+# REMOVE EMPTY ROWS
+# ============================================
+
+df = df.dropna(
+    subset=["full_name"]
+)
+
+# ============================================
+# REMOVE SERVICE ROW
+# ============================================
+
+df = df[
+    df["full_name"] != "9"
+]
 
 # ============================================
 # STRIP SPACES
@@ -145,6 +160,12 @@ for col in text_columns:
 final_rows = len(df)
 
 # ============================================
+# CLEANED ROW COUNT
+# ============================================
+
+cleaned_rows = original_rows - final_rows
+
+# ============================================
 # DEBUG
 # ============================================
 
@@ -220,6 +241,8 @@ try:
     print(f"Очищено рядків у БД: {old_rows}")
 
     print(f"Було рядків в Excel: {original_rows}")
+
+    print(f"Видалено сміттєвих рядків: {cleaned_rows}")
 
     print(f"Завантажено нових рядків: {final_rows}")
 
