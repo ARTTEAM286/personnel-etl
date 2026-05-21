@@ -81,12 +81,29 @@ df = df[
 ]
 
 # ============================================
-# STRIP SPACES
+# CLEAN TEXT COLUMNS
 # ============================================
 
-text_cols = df.select_dtypes(
-    include="object"
-).columns
+text_cols = [
+
+    "full_name",
+
+    "military_rank",
+
+    "tax_number",
+
+    "reason",
+
+    "order_info",
+
+    "current_position",
+
+    "new_position",
+
+    "daily_order_number",
+
+    "comment"
+]
 
 for col in text_cols:
 
@@ -114,7 +131,6 @@ for col in date_columns:
 
     df[col] = pd.to_datetime(
         df[col],
-        format="%d.%m.%Y",
         errors="coerce"
     )
 
@@ -242,7 +258,7 @@ try:
 
     print(f"Було рядків в Excel: {original_rows}")
 
-    print(f"Видалено сміттєвих рядків: {cleaned_rows}")
+    print(f"Видалено службових/порожніх рядків: {cleaned_rows}")
 
     print(f"Завантажено нових рядків: {final_rows}")
 
