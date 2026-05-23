@@ -27,7 +27,13 @@ df = pd.read_excel(
     file_path,
     sheet_name="ООС",
     header=2,
-    engine="openpyxl"
+    engine="openpyxl",
+    dtype={
+        "20": str,
+        "302": str,
+        "308": str,
+        "21": str
+    }
 )
 
 print(f"Зчитано рядків з Excel: {len(df)}")
