@@ -13,7 +13,7 @@ from sqlalchemy import (
 # FILE PATH
 # ============================================
 
-file_path = r"C:\Users\Admin\Desktop\ДОВІРЕНА\ШПС_253ОШП_з_формулами.xlsm"
+file_path = r"E:\ДОВІРЕНА\ШПС_253ОШП_з_формулами.xlsm"
 
 # ============================================
 # READ EXCEL
@@ -198,7 +198,7 @@ print(df.info())
 # ============================================
 
 engine = create_engine(
-    "postgresql+psycopg2://postgres:3840@127.0.0.1:5432/arey_db"
+    "postgresql+psycopg2://postgres:postgres@127.0.0.1:5432/arey_db"
 )
 
 # ============================================
